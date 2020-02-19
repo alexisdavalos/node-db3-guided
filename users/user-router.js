@@ -77,4 +77,15 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+//list all posts for a user
+router.get('/:id/posts', (req, res) =>{
+  db('posts as p')
+  .join('users as u', 'u.id', 'p.user_id')
+  .select('P.contents', 'u.username as saidBy')
+  .where('user_id', req.params.id)
+  .then(posts =>{
+    res.status(200).json(posts);
+  })
+  .catch(err => {console.log(err); res.status(500).json({oops: "Error"})})
+})
 module.exports = router;
